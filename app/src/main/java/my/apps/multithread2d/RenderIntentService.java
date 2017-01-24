@@ -9,9 +9,12 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.ImageView;
+
+import java.util.Timer;
 
 public class RenderIntentService extends IntentService {
     public static final String PARAM_IN_MSG = "imsg";
@@ -51,12 +54,12 @@ public class RenderIntentService extends IntentService {
 
         for (int j = 0; j < 320; j++) {
             for (int i = 0; i < 320; i++) {
-                int c = Color.RED;
-                p.setColor(c);
+                int col = (int)System.currentTimeMillis();
+                p.setColor(col);
 
                 canvas.drawPoint(i, j, p);
 
-                if(i % 2 == 0 && j % 2 == 0) {
+                if(i % 8 == 0 && j % 8 == 0) {
                     Intent broadcastIntent = new Intent();
                     broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
                     broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
