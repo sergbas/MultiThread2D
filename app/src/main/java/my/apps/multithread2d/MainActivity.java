@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            //Log.e(TAG, "ResponseReceiver.onReceive");
+            Log.e(TAG, "ResponseReceiver.onReceive");
             TextView result = (TextView) findViewById(R.id.text);
             String text = intent.getStringExtra(RenderIntentService.PARAM_OUT_MSG);
             result.setText(text);

@@ -56,7 +56,7 @@ public class RenderIntentService extends IntentService {
 
                 canvas.drawPoint(i, j, p);
 
-                if(i % 4 == 0 && j % 4 == 0) {
+                if(i % 2 == 0 && j % 2 == 0) {
                     Intent broadcastIntent = new Intent();
                     broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
                     broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
