@@ -56,14 +56,15 @@ public class RenderIntentService extends IntentService {
 
                 canvas.drawPoint(i, j, p);
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
-                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                broadcastIntent.putExtra(PARAM_OUT_MSG, i + ", " + j);
-                sendBroadcast(broadcastIntent);
+                if(i % 4 == 0 && j % 4 == 0) {
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+                    broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    broadcastIntent.putExtra(PARAM_OUT_MSG, i + ", " + j);
+                    sendBroadcast(broadcastIntent);
+                }
             }
         }
-
     }
 
 
