@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume(){
-        image.setImageBitmap(bitmap);
+        if(image != null && bitmap != null)
+            image.setImageBitmap(bitmap);
     }
 
 
