@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +17,10 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    public static Bitmap bitmap;
     private ResponseReceiver receiver;
     private EditText et;
-    public ImageView image;
+    public static ImageView image;
     private Context context;
     private int state = 0;
 
@@ -27,10 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e(TAG, "ResponseReceiver.onReceive");
+            //Log.e(TAG, "ResponseReceiver.onReceive");
             TextView result = (TextView) findViewById(R.id.text);
             String text = intent.getStringExtra(RenderIntentService.PARAM_OUT_MSG);
             result.setText(text);
+
+            image.setImageBitmap(bitmap);
+
         }
     }
     
@@ -63,4 +68,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

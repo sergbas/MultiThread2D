@@ -2,9 +2,16 @@ package my.apps.multithread2d;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.widget.ImageView;
 
 public class RenderIntentService extends IntentService {
     public static final String PARAM_IN_MSG = "imsg";
@@ -13,6 +20,8 @@ public class RenderIntentService extends IntentService {
     private static final String TAG = RenderIntentService.class.getSimpleName();
 
     private boolean isWorking = false;
+    private Handler h;
+    private ImageView image;
 
     public RenderIntentService() {
         super("RenderIntentService");
@@ -24,22 +33,45 @@ public class RenderIntentService extends IntentService {
         String msg = intent.getStringExtra(PARAM_IN_MSG);
         String state = intent.getStringExtra(PARAM_STATUS_MSG);
 
-        if(state.equals("start")) isWorking = true;
-        if(state.equals("stop")) isWorking = false;
+        if (state.equals("start")) isWorking = true;
+        if (state.equals("stop")) isWorking = false;
 
         Log.e(TAG, "state:" + state + "; isWorking:" + isWorking);
 
-        for(int i=0; i<10; i++) {
-            SystemClock.sleep(1000); // 30 seconds
-            String resultTxt = msg + " "
-                    + DateFormat.format("yyyy/MM/dd h:mm:ss", System.currentTimeMillis());
+        image = MainActivity.image;
+
+        MainActivity.bitmap = Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(MainActivity.bitmap);
+
+
+        final Paint p = new Paint();
+        p.setAntiAlias(false);
+        p.setStyle(Paint.Style.FILL_AND_STROKE);
+        p.setStrokeWidth(1);
+
+        for (int j = 0; j < 320; j++) {
+            for (int i = 0; i < 320; i++) {
+                int c = Color.RED;
+                p.setColor(c);
+
+                canvas.drawPoint(i, j, p);
+            }
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_OUT_MSG, resultTxt);
+            broadcastIntent.putExtra(PARAM_OUT_MSG, "row: " + j);
             sendBroadcast(broadcastIntent);
         }
+
+        for (int i = 0; i < 10; i++) {
+            SystemClock.sleep(1000); // 30 seconds
+            String resultTxt = msg + " "
+                    + DateFormat.format("yyyy/MM/dd h:mm:ss", System.currentTimeMillis());
+
+
+        }
     }
+
 
 }
