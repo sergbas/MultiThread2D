@@ -55,22 +55,15 @@ public class RenderIntentService extends IntentService {
                 p.setColor(c);
 
                 canvas.drawPoint(i, j, p);
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
+                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                broadcastIntent.putExtra(PARAM_OUT_MSG, i + ", " + j);
+                sendBroadcast(broadcastIntent);
             }
-
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
-            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_OUT_MSG, "row: " + j);
-            sendBroadcast(broadcastIntent);
         }
 
-        for (int i = 0; i < 10; i++) {
-            SystemClock.sleep(1000); // 30 seconds
-            String resultTxt = msg + " "
-                    + DateFormat.format("yyyy/MM/dd h:mm:ss", System.currentTimeMillis());
-
-
-        }
     }
 
 
