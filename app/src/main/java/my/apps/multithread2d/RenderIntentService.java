@@ -50,10 +50,15 @@ public class RenderIntentService extends IntentService {
         MainActivity.bitmap = Bitmap.createBitmap(320, 320, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(MainActivity.bitmap);
 
-        new MyRunnable(0, 0, 160, 160);
-        new MyRunnable(160, 0, 320, 160);
-        new MyRunnable(0, 160, 160, 320);
-        new MyRunnable(160, 160, 320, 320);
+        int sizeX = 8;
+        int sizeY = 8;
+
+        int dx = 320 / sizeX;
+        int dy = 320 / sizeY;
+
+        for(int j=0; j<sizeY; j++)
+            for(int i=0; i<sizeX; i++)
+                new MyRunnable(i*dx, j*dy, (i+1)*dx, (j+1)*dy);
     }
 
 
