@@ -14,6 +14,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.util.Random;
 import java.util.Timer;
 
 public class RenderIntentService extends IntentService {
@@ -47,14 +48,14 @@ public class RenderIntentService extends IntentService {
 
     private void drawRegion(int x1, int y1, int x2, int y2) {
         image = MainActivity.image;
-        MainActivity.bitmap = Bitmap.createBitmap(640, 640, Bitmap.Config.ARGB_8888);
+        MainActivity.bitmap = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(MainActivity.bitmap);
 
         int sizeX = 4;
         int sizeY = 4;
 
-        int dx = 640 / sizeX;
-        int dy = 640 / sizeY;
+        int dx = 1024 / sizeX;
+        int dy = 1024 / sizeY;
 
         for(int j=0; j<sizeY; j++)
             for(int i=0; i<sizeX; i++)
@@ -84,24 +85,17 @@ public class RenderIntentService extends IntentService {
                 p.setStyle(Paint.Style.FILL_AND_STROKE);
                 p.setStrokeWidth(1);
 
-                for (int j = y1; j < y2; j++) {
-                    for (int i = x1; i < x2; i++) {
-                        int col = (int)System.currentTimeMillis();
+                for (int j = y1; j <= y2; j++) {
+                    for (int i = x1; i <= x2; i++) {
 
-                        //будем рисовать красный круг на синем фоне
-                        int dx = i - 320;
-                        int dy = j - 320;
-                        double d = Math.sqrt(dx*dx + dy*dy);
-                        if(d<200) col = Color.RED;
-                        else if(d<250) col = Color.argb(255, 0xff, 0x80, 0x00);
-                        else if(d<300) col = Color.YELLOW;
-                        else col = Color.BLUE;
-
-                        p.setColor(col);
+                        p.setColor(getColorByXY(i, j));
 
                         canvas.drawPoint(i, j, p);
 
-                        if(i % 4 == 0 && j % 4 == 0) {
+                        //System.currentTimeMillis()
+
+                        //изредка обновляем картинку в UI
+                        if(i % 32 == 0 && j % 32 == 0) {
                             Intent broadcastIntent = new Intent();
                             broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
                             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -114,6 +108,20 @@ public class RenderIntentService extends IntentService {
                 Log.i(TAG, "Второй поток прерван");
             }
         }
+    }
+
+    private int getColorByXY(int i, int j) {
+        int col = 0;
+
+        //будем рисовать красный круг на синем фоне
+        int dx = i - 512;
+        int dy = j - 512;
+        double d = Math.sqrt(dx*dx + dy*dy);
+        if(d<300) col = Color.RED;
+        else if(d<400) col = Color.argb(255, 0xff, 0x80, 0x00);
+        else if(d<500) col = Color.YELLOW;
+        else col = (new Random()).nextDouble() < 0.99 ? Color.BLUE : Color.WHITE;
+        return col;
     }
 
 }
