@@ -47,14 +47,14 @@ public class RenderIntentService extends IntentService {
 
     private void drawRegion(int x1, int y1, int x2, int y2) {
         image = MainActivity.image;
-        MainActivity.bitmap = Bitmap.createBitmap(320, 320, Bitmap.Config.ARGB_8888);
+        MainActivity.bitmap = Bitmap.createBitmap(640, 640, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(MainActivity.bitmap);
 
         int sizeX = 4;
         int sizeY = 4;
 
-        int dx = 320 / sizeX;
-        int dy = 320 / sizeY;
+        int dx = 640 / sizeX;
+        int dy = 640 / sizeY;
 
         for(int j=0; j<sizeY; j++)
             for(int i=0; i<sizeX; i++)
@@ -89,10 +89,12 @@ public class RenderIntentService extends IntentService {
                         int col = (int)System.currentTimeMillis();
 
                         //будем рисовать красный круг на синем фоне
-                        int dx = i - 160;
-                        int dy = j - 160;
+                        int dx = i - 320;
+                        int dy = j - 320;
                         double d = Math.sqrt(dx*dx + dy*dy);
-                        if(d<120) col = Color.RED;
+                        if(d<200) col = Color.RED;
+                        else if(d<250) col = Color.argb(255, 0xff, 0x80, 0x00);
+                        else if(d<300) col = Color.YELLOW;
                         else col = Color.BLUE;
 
                         p.setColor(col);
