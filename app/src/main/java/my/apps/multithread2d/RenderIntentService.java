@@ -50,8 +50,8 @@ public class RenderIntentService extends IntentService {
         MainActivity.bitmap = Bitmap.createBitmap(320, 320, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(MainActivity.bitmap);
 
-        int sizeX = 8;
-        int sizeY = 8;
+        int sizeX = 4;
+        int sizeY = 4;
 
         int dx = 320 / sizeX;
         int dy = 320 / sizeY;
@@ -87,6 +87,14 @@ public class RenderIntentService extends IntentService {
                 for (int j = y1; j < y2; j++) {
                     for (int i = x1; i < x2; i++) {
                         int col = (int)System.currentTimeMillis();
+
+                        //будем рисовать красный круг на синем фоне
+                        int dx = i - 160;
+                        int dy = j - 160;
+                        double d = Math.sqrt(dx*dx + dy*dy);
+                        if(d<120) col = Color.RED;
+                        else col = Color.BLUE;
+
                         p.setColor(col);
 
                         canvas.drawPoint(i, j, p);
