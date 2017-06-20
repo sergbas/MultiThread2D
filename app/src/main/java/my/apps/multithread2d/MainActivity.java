@@ -17,12 +17,14 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    public static Bitmap bitmap;
-    private ResponseReceiver receiver;
     private EditText et;
+
+    private ResponseReceiver receiver;
+    public static Bitmap bitmap;
     public static ImageView image;
-    private Context context;
+
     private int state = 0;
+    private Context context;
 
     public class ResponseReceiver extends BroadcastReceiver {
         public static final String ACTION_RESP = "my.apps.multithread2d.intent.action.MESSAGE_PROCESSED";
