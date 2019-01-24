@@ -85,6 +85,9 @@ public class RenderIntentService extends IntentService {
                 p.setStyle(Paint.Style.FILL_AND_STROKE);
                 p.setStrokeWidth(1);
 
+                Random r = new Random();
+                int delay = r.nextInt(5);
+
                 for (int j = y1; j <= y2; j++) {
                     for (int i = x1; i <= x2; i++) {
 
@@ -92,10 +95,11 @@ public class RenderIntentService extends IntentService {
 
                         canvas.drawPoint(i, j, p);
 
+                        Thread.sleep(delay);
                         //System.currentTimeMillis()
 
                         //изредка обновляем картинку в UI
-                        if(i % 32 == 0 && j % 32 == 0) {
+                        if(i % 1 == 0 && j % 1 == 0) {
                             Intent broadcastIntent = new Intent();
                             broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
                             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
