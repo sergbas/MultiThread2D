@@ -28,6 +28,14 @@ public class RenderIntentService extends IntentService {
     private ImageView image;
     private Canvas canvas;
 
+    private int width = 1024;
+    private int height = 1024;
+    private int sizeX = 4;
+    private int sizeY = 4;
+
+    private int dx = width / sizeX;
+    private int dy = height / sizeY;
+
     public RenderIntentService() {
         super("RenderIntentService");
     }
@@ -44,22 +52,16 @@ public class RenderIntentService extends IntentService {
         Log.e(TAG, "state:" + state + "; isWorking:" + isWorking);
 
         drawRegion(0, 0, 320, 320);
-   }
+    }
 
     private void drawRegion(int x1, int y1, int x2, int y2) {
         image = MainActivity.image;
-        MainActivity.bitmap = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
+        MainActivity.bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(MainActivity.bitmap);
 
-        int sizeX = 4;
-        int sizeY = 4;
-
-        int dx = 1024 / sizeX;
-        int dy = 1024 / sizeY;
-
-        for(int j=0; j<sizeY; j++)
-            for(int i=0; i<sizeX; i++)
-                new MyRunnable(i*dx, j*dy, (i+1)*dx, (j+1)*dy);
+        for (int j = 0; j < sizeY; j++)
+            for (int i = 0; i < sizeX; i++)
+                new MyRunnable(i * dx, j * dy, (i + 1) * dx, (j + 1) * dy);
     }
 
 
@@ -99,7 +101,7 @@ public class RenderIntentService extends IntentService {
                         //System.currentTimeMillis()
 
                         //изредка обновляем картинку в UI
-                        if(i % 1 == 0 && j % 1 == 0) {
+                        if (i % 1 == 0 && j % 1 == 0) {
                             Intent broadcastIntent = new Intent();
                             broadcastIntent.setAction(MainActivity.ResponseReceiver.ACTION_RESP);
                             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -115,15 +117,15 @@ public class RenderIntentService extends IntentService {
     }
 
     private int getColorByXY(int i, int j) {
-        int col = 0;
+        int col;
 
         //будем рисовать красный круг на синем фоне
-        int dx = i - 512;
-        int dy = j - 512;
-        double d = Math.sqrt(dx*dx + dy*dy);
-        if(d<300) col = Color.RED;
-        else if(d<400) col = Color.argb(255, 0xff, 0x80, 0x00);
-        else if(d<500) col = Color.YELLOW;
+        int dx = i - width / 2;
+        int dy = j - height / 2;
+        double d = Math.sqrt(dx * dx + dy * dy);
+        if (d < width / 3) col = Color.RED;
+        else if (d < width * 4 / 10) col = Color.argb(0xff, 0xff, 0x80, 0x00);
+        else if (d < width / 2) col = Color.YELLOW;
         else col = (new Random()).nextDouble() < 0.99 ? Color.BLUE : Color.WHITE;
         return col;
     }
